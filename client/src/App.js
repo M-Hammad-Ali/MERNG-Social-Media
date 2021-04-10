@@ -5,13 +5,17 @@ import 'semantic-ui-css/semantic.min.css';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
+import MenuBar from './components/MenuBar';
 
 function App() {
   return (
     <Router>
-      <Route exact path="/" component={Home}/>
-      <Route exact path="/login" component={Login}/>
-      <Route exact path="/register" component={Register}/>
+      <div className="ui container">
+        <MenuBar/>
+        <Route exact path="/" component={Home}/>
+        <Route exact path="/login" component={Login}/>
+        <Route exact path="/register" component={Register}/>
+      </div>
     </Router>
   );
 }
