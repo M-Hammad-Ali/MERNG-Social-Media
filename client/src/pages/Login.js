@@ -76,7 +76,7 @@ export default function Login(props) {
 
 
 const LOGIN_USER = gql `
-    mutation register(
+    mutation login(
         $username:String!
         $password:String!
     ) {
