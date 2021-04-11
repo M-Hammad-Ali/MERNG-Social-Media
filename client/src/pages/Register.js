@@ -1,30 +1,27 @@
 import gql from 'graphql-tag';
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import {useMutation} from '@apollo/client';
 import 'semantic-ui-css/semantic.min.css';
 
+import {useForm} from '../utils/hooks';
+import { AuthContext } from '../context/auth';
+
 export default function Register(props) {
+    const context = useContext(AuthContext);
     const [errors,setErrors] = useState({});
-    const [values,setValues] = useState({
+
+    const {onSubmit,onChange,values}= useForm(adduser,{
         username:"",
         email:"",
         password:"",
         confirmPassword:""
-    });
-
-    const onSubmit = (event)=> {
-        event.preventDefault();
-        addUser();
-    }
-
-    const onChange = (event)=> {
-        setValues({...values, [event.target.name] : event.target.value})
-    }
+    })
 
     const [addUser,{loading}] = useMutation(REGISTER_USER,{
         update(_, result) {
             console.log(result);
+            context.login(result.data.register);
             props.history.push('/');
         },
         onError(err){
@@ -33,9 +30,14 @@ export default function Register(props) {
         },
         variables: values
     })
+
+    function adduser () {
+        addUser();
+    }
     return (
         <div className='form-container'>
             <Form onSubmit={onSubmit} noValidate className={loading?'loading':""}>
+                <h1>Register</h1>
                 <Form.Input
                     label="Username"
                     placeholder="Username..."

@@ -12,7 +12,7 @@ export default function PostCard({post:{body,createdAt,id,username,likeCount,com
 
     }
     return (
-        <Card fluid as={Link} to={`/posts/${id}`}>
+        <Card fluid>
             <Card.Content>
                 <Image
                 floated='right'

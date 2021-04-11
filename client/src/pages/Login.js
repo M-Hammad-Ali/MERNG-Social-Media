@@ -1,30 +1,27 @@
 import gql from 'graphql-tag';
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import {useMutation} from '@apollo/client';
 import 'semantic-ui-css/semantic.min.css';
 
+import {useForm} from '../utils/hooks';
+import { AuthContext } from '../context/auth';
+
 export default function Login(props) {
+    const context = useContext(AuthContext);
     const [errors,setErrors] = useState({});
-    const [values,setValues] = useState({
+
+    
+    const {onChange,onSubmit, values} = useForm(logUser,{
         username:"",
-        email:"",
         password:"",
-        confirmPassword:""
-    });
+    })
+    
 
-    const onSubmit = (event)=> {
-        event.preventDefault();
-        loginUser();
-    }
-
-    const onChange = (event)=> {
-        setValues({...values, [event.target.name] : event.target.value})
-    }
-
-    const [loginUser,{loading}] = useMutation(REGISTER_USER,{
+    const [loginUser,{loading}] = useMutation(LOGIN_USER,{
         update(_, result) {
             console.log(result);
+            context.login(result.data.login);
             props.history.push('/');
         },
         onError(err){
@@ -33,9 +30,14 @@ export default function Login(props) {
         },
         variables: values
     })
+
+    function logUser() {
+        loginUser();
+    }
     return (
         <div className='form-container'>
             <Form onSubmit={onSubmit} noValidate className={loading?'loading':""}>
+                <h1>Login</h1>
                 <Form.Input
                     label="Username"
                     placeholder="Username..."
@@ -73,7 +75,7 @@ export default function Login(props) {
 }
 
 
-const REGISTER_USER = gql `
+const LOGIN_USER = gql `
     mutation register(
         $username:String!
         $password:String!
