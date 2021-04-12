@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { AuthContext } from "../context/auth";
 import LikeButton from './LikeButton';
+import DeletePost from './DeletePost';
 
 export default function PostCard({post:{body,createdAt,id,username,likeCount,commentCount,likes}} ) {
     const {user} = useContext(AuthContext)
@@ -34,9 +35,7 @@ export default function PostCard({post:{body,createdAt,id,username,likeCount,com
                     </Label>
                 </Button>
                 {user && user.username === username && ( 
-                    <Button as="div" color="red" onClick={()=>console.log('delete post')} style={{float:'right'}}>
-                        <Icon name="trash" style={{margin:0}}/>
-                    </Button>
+                    <DeletePost postId={id}/>
                 )}
             </Card.Content>
         </Card>
